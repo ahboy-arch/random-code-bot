@@ -5,33 +5,42 @@ const token = '8816785125:AAEyWLNd49Aoyxjqo_-1fdhj-NuVu_WU_Kw';
 const bot = new TelegramBot(token, { polling: true });
 
 function generateCode() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
 
-  let code = '';
+    let result = '';
 
-  for (let i = 0; i < 6; i++) {
-    code += letters.charAt(Math.floor(Math.random() * letters.length));
-  }
+    // 3 uppercase
+    for (let i = 0; i < 3; i++) {
+        result += upper.charAt(Math.floor(Math.random() * upper.length));
+    }
 
-  for (let i = 0; i < 2; i++) {
-    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
-  }
+    // 3 lowercase
+    for (let i = 0; i < 3; i++) {
+        result += lower.charAt(Math.floor(Math.random() * lower.length));
+    }
 
-  return code;
+    // 2 numbers
+    for (let i = 0; i < 2; i++) {
+        result += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+
+    // Shuffle characters
+    result = result.split('').sort(() => Math.random() - 0.5).join('');
+
+    return result;
 }
 
-bot.onText(/\/code/, (msg) => {
-  const chatId = msg.chat.id;
-  const randomCode = generateCode();
-
-  bot.sendMessage(chatId, `🎲 Your Random Code:\n${randomCode}`);
+bot.onText(/\/start/, (msg) => {
+    bot.sendMessage(msg.chat.id, 'Send /generate to create random code.');
 });
 
-bot.on('message', (msg) => {
-  if (msg.text !== '/code') {
-    bot.sendMessage(msg.chat.id, 'Send /code to generate a random code.');
-  }
+bot.onText(/\/generate/, (msg) => {
+    const code = generateCode();
+    bot.sendMessage(msg.chat.id, `Generated Code: ${code}`);
 });
 
-console.log('Telegram bot is running...');
+console.log('Bot is running...');
+
+bot.startPolling();
