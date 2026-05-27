@@ -42,5 +42,3 @@ bot.onText(/\/generate/, (msg) => {
 });
 
 console.log('Bot is running...');
-
-bot.startPolling();
