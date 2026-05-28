@@ -77,4 +77,3 @@ bot.on('polling_error', (error) => {
 });
 
 console.log('Bot is running...');
-```
