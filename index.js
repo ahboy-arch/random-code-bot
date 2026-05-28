@@ -1,13 +1,14 @@
-```js
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 
 const token = '8816785125:AAEyWLNd49Aoyxjqo_-1fdhj-NuVu_WU_Kw';
 
-// Create Telegram Bot
-const bot = new TelegramBot(token, { polling: true });
+// Telegram Bot
+const bot = new TelegramBot(token, {
+    polling: true
+});
 
-// Express app for Render
+// Express server for Render
 const app = express();
 
 app.get('/', (req, res) => {
@@ -20,7 +21,7 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-// Generate random code
+// Random Code Generator
 function generateCode() {
     const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -28,12 +29,12 @@ function generateCode() {
 
     let result = '';
 
-    // 3 uppercase letters
+    // 3 uppercase
     for (let i = 0; i < 3; i++) {
         result += upper.charAt(Math.floor(Math.random() * upper.length));
     }
 
-    // 3 lowercase letters
+    // 3 lowercase
     for (let i = 0; i < 3; i++) {
         result += lower.charAt(Math.floor(Math.random() * lower.length));
     }
@@ -43,7 +44,7 @@ function generateCode() {
         result += numbers.charAt(Math.floor(Math.random() * numbers.length));
     }
 
-    // Shuffle code
+    // Shuffle
     result = result
         .split('')
         .sort(() => Math.random() - 0.5)
@@ -52,7 +53,7 @@ function generateCode() {
     return result;
 }
 
-// Start command
+// Start Command
 bot.onText(/\/start/, (msg) => {
     bot.sendMessage(
         msg.chat.id,
@@ -60,7 +61,7 @@ bot.onText(/\/start/, (msg) => {
     );
 });
 
-// Generate command
+// Generate Command
 bot.onText(/\/generate/, (msg) => {
     const code = generateCode();
 
@@ -70,7 +71,7 @@ bot.onText(/\/generate/, (msg) => {
     );
 });
 
-// Polling error handler
+// Error Handler
 bot.on('polling_error', (error) => {
     console.log(error);
 });
